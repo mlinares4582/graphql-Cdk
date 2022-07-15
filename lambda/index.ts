@@ -27,12 +27,25 @@ async function getServer() {
     });
 }
 
-exports.graphqlHandler = server.createHandler();
+// exports.graphqlHandler = server.createHandler();
         
+const apolloHandler = server.createHandler();
+
+  exports.graphqlHandler = async function (event:any , context:any) {
+    const server2 = await getServer();
+    const apolloHandler2 =  server2.createHandler();
+
+    try {
+      return await apolloHandler2(event, context);
+    } catch(error) {
+      console.error(error);
+    } 
+    
+  }
 
 
 
-// exports.handler = async function(event){
+// exports.graphqlHandler = async function(event){
 //     console.log("request",JSON.stringify(event,undefined,2));
 
   
