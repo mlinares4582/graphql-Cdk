@@ -1,16 +1,53 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
+import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
+import { Code, Runtime, Function} from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { join } from 'path';
+import * as  path from 'path';
+
 
 export class GraphqlCdkStack extends Stack {
+
+  private lambda: Function;
+  private api: LambdaRestApi;
+
+
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
-
-    // example resource
-    // const queue = new sqs.Queue(this, 'GraphqlCdkQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    this.lambda = this.createGraphqlLambda();
+    this.createLambdaRestApi(this.lambda)
+    
   }
+
+
+  createLambdaRestApi(fn:Function):LambdaRestApi{
+
+    this.api =  new LambdaRestApi(this,'Lambda Api Graphql',{
+      handler:fn,         
+    });
+    return this.api
+  }
+
+// createGraphqlLambda():Function{
+//   this.lambda = new Function(this, 'GraphqlLambda', {
+//     functionName: 'graphql-lambda',
+//     runtime:Runtime.NODEJS_14_X,
+//     handler: 'index.graphqlHandler',
+//     code: Code.fromAsset(join(__dirname, '../lambda')),
+//   })
+//     return this.lambda
+//   }
+createGraphqlLambda():Function{
+  this.lambda = new NodejsFunction(this, 'GraphqlLambda', {
+  entry: path.join(__dirname,'..','lambda', 'index.ts'),
+  handler: 'graphqlHandler',
+  }); 
+  return this.lambda;
+  }
+
 }
+
+
+
