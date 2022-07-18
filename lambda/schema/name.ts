@@ -23,25 +23,26 @@ export class NameResolver{
         }
 
         const data = await dynamoDB.scan(params).promise()
-        const d = JSON.stringify(data.Items)
-        console.log(d)
+        const results = JSON.stringify(data.Items)
+        console.log(results)
         
-        return d
+        return results
     }
 
 
-    // @Mutation( ()=> String)
-    //     createUser(@Arg("name") name:string){
-    //         const params = {
-    //             TableName: "AthMovilDB",
-    //             Item: {
-    //                 name: name
-    //             }
-    //         }
+    @Mutation( ()=> String)
+        createUser(@Arg("name") contact_name:string){
+            const params = {
+                TableName: "AthMovilDB",
+                Item: {
+                    contact_name,
 
-    //         dynamoDB.put(params).promise()
-    //         return "User created was " + name
-    //     }
+                }
+            }
+
+            dynamoDB.put(params).promise();
+            return "User created was " + contact_name
+        }
 
 
 }

@@ -1,6 +1,6 @@
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 const AWS = require("aws-sdk")
-import { ApiConstants } from "../constants/api-constans";
+import { ApiConstants } from "../lambda/constants/api-constans";
 require("dotenv").config();
 const dynamoDB = new AWS.DynamoDB.DocumentClient()
 
