@@ -3,7 +3,6 @@ import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Code, Runtime, Function} from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
-// import { join } from 'path';
 import * as  path from 'path';
 
 
@@ -30,15 +29,6 @@ export class GraphqlCdkStack extends Stack {
     return this.api
   }
 
-// createGraphqlLambda():Function{
-//   this.lambda = new Function(this, 'GraphqlLambda', {
-//     functionName: 'graphql-lambda',
-//     runtime:Runtime.NODEJS_14_X,
-//     handler: 'index.graphqlHandler',
-//     code: Code.fromAsset(join(__dirname, '../lambda')),
-//   })
-//     return this.lambda
-//   }
 createGraphqlLambda():Function{
   this.lambda = new NodejsFunction(this, 'GraphqlLambda', {
   entry: path.join(__dirname,'..','lambda', 'index.ts'),
