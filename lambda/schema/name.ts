@@ -1,4 +1,4 @@
-import {Resolver,Query, Mutation , Arg} from 'type-graphql'
+import {Resolver,Query, Mutation , Arg, Int, Float} from 'type-graphql'
 const AWS = require("aws-sdk");
 // require("dotenv").config();
 
@@ -9,9 +9,11 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient()
 @Resolver()
 export class NameResolver{
     @Query(() => String)
-        helloName(){
-            return "Hello World"
-        }
+        helloName(
+            @Arg("name", type => String) name: string
+        ){
+            return name
+        } 
 
 
 
@@ -30,18 +32,21 @@ export class NameResolver{
     }
 
 
-    @Mutation( ()=> String)
-        createUser(@Arg("name") contact_name:string){
+    @Mutation( () => String)
+        async createUser( 
+             @Arg("name", type => String) name: string,
+        @Arg("amount", type => Float) amount: number
+            ): Promise<string>{
             const params = {
                 TableName: "AthMovilDB",
                 Item: {
-                    contact_name,
-
+                    user_id: name,
+                    amount:amount
                 }
             }
 
-            dynamoDB.put(params).promise();
-            return "User created was " + contact_name
+           await dynamoDB.put(params).promise();
+            return "User created was " 
         }
 
 
