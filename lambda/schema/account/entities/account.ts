@@ -1,20 +1,21 @@
+require("reflect-metadata");
 import { Field, ObjectType } from "type-graphql"
 import { Balance } from "./balance"
 
 @ObjectType()
 export class Account {
-    @Field()
+    @Field(type => String)
     account_id: string
-    @Field()
+    @Field(type => Balance)
     balances: Balance
-    @Field()
+    @Field(type => String)
     mask: string
-    @Field()
+    @Field(type => String)
     name: string
-    @Field()
+    @Field(type => String)
     official_name: string
-    @Field()
+    @Field(type => String)
     type: string
-    @Field()
+    @Field(type => String)
     subtype: string
 }

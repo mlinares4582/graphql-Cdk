@@ -1,6 +1,8 @@
+require("reflect-metadata");
 import { Resolver, Query, Arg } from "type-graphql";
 import { Account } from "../entities/account";
 import axios from "axios";
+import { PlaidConstants } from "../../../constants/plaid-constans";
 
 @Resolver()
 export class AccountResolver {
@@ -18,8 +20,8 @@ export class AccountResolver {
 
         //Get Accounts with Plaid API and Access Token
         return await this.plaidApi.post('/accounts/balance/get', {
-            client_id: ServerConfig.PLAIDCLIENT,
-            secret: ServerConfig.PLAIDSECRET,
+            client_id: PlaidConstants.PLAIDCLIENT,
+            secret: PlaidConstants.PLAIDSECRET,
             access_token: accessToken
         }).then(res => {
             return res.data['accounts'];

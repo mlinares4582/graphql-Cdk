@@ -1,15 +1,16 @@
+require("reflect-metadata");
 import { Field, ObjectType } from "type-graphql"
 
 @ObjectType()
 export class Balance {
-    @Field()
+    @Field(type => Number,)
     available: number 
-    @Field()
+    @Field(type => Number,)
     current: number
-    @Field()
+    @Field(type => String)
     iso_currency_code: string
-    @Field({ nullable: true })
+    @Field(type => Number, { nullable: true })
     limit?: number
-    @Field({ nullable: true })
+    @Field(type => String,{ nullable: true })
     unofficial_currency_code?: string
 }

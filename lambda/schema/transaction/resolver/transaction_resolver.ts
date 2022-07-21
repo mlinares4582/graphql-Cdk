@@ -1,3 +1,4 @@
+require("reflect-metadata");
 import { Resolver, Query, Arg, Mutation } from "type-graphql";
 import { NewTransactionInput, Transaction } from "../entities/transaction";
 import axios from "axios";
@@ -41,16 +42,16 @@ export class TransactionResolver {
 
     }
 
-    @Query(() => [Transaction])
-    async getTransactions(
-        @Arg("userId", type => String) userId: string,
-    ): Promise<[Transaction]> {
-        //TODO: Get Transactions from Dynamo by UserID
-        //var query = `SELECT * FROM transactions
-        //            WHERE user_id = '${userId}'
-        //            ORDER BY "timestamp" DESC`;
-        //const { rows } = await client.query(query);
-        const transactions = [];
-        return transactions;
-    }
+    // @Query(() => [Transaction])
+    // async getTransactions(
+    //     @Arg("userId", type => String) userId: string,
+    // ): Promise<[Transaction]> {
+    //     //TODO: Get Transactions from Dynamo by UserID
+    //     //var query = `SELECT * FROM transactions
+    //     //            WHERE user_id = '${userId}'
+    //     //            ORDER BY "timestamp" DESC`;
+    //     //const { rows } = await client.query(query);
+    //     const transactions = [];
+    //     return transactions;
+    // }
 }

@@ -4,7 +4,9 @@ const {ApolloServer, gql} = require('apollo-server-lambda');
 require('apollo-server-lambda');
 const {PingResolver} =require("./schema/ping");
 const {NameResolver} =require("./schema/name");
-
+const { AccountResolver } =require( "./schema/account/resolver/account_resolver");
+const { PlaidResolver } =require( "./schema/plaid/resolver/plaid_resolver");
+const { TransactionResolver } =require( "./schema/transaction/resolver/transaction_resolver");
 
 
 // const { unmarshall } = require("@aws-sdk/util-dynamodb");
@@ -16,7 +18,7 @@ const {NameResolver} =require("./schema/name");
 
 
 const globalSchema = buildSchema({
-    resolvers: [PingResolver, NameResolver]
+    resolvers: [PingResolver, NameResolver,PlaidResolver,AccountResolver,TransactionResolver]
 
 });
 

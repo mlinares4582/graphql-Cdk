@@ -1,42 +1,43 @@
+require("reflect-metadata");
 import { Field, InputType, ObjectType } from "type-graphql"
 
 
 @ObjectType()
 export class Transaction {
-    @Field()
+    @Field(type => String)
     transaction_id: string;
-    @Field()
+    @Field(type => String)
     account_name: string;
-    @Field()
+    @Field(type => String)
     account_mask: string;
-    @Field()
+    @Field(type => String)
     amount: string;
-    @Field()
+    @Field(type => String)
     user_id: string;
-    @Field()
+    @Field(type => String)
     contact_name: string;
-    @Field()
+    @Field(type => String)
     contact_number: string;
-    @Field()
+    @Field(type => String)
     message: string;
-    @Field()
+    @Field(type => String)
     timestamp: string;
 }
 
 @InputType()
 export class NewTransactionInput {
-    @Field()
+    @Field(type => String)
     account_name: string;
-    @Field()
+    @Field(type => String)
     account_mask: string;
-    @Field()
+    @Field(type => String)
     amount: string;
-    @Field()
+    @Field(type => String)
     user_id: string;
-    @Field()
+    @Field(type => String)
     contact_name: string;
-    @Field()
+    @Field(type => String)
     contact_number: string;
-    @Field()
+    @Field(type => String)
     message: string;
 }

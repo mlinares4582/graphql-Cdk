@@ -1,4 +1,4 @@
-require("reflect-metadata");
+import { typeFromAST } from "graphql";
 import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()

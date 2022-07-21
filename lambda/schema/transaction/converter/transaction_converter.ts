@@ -1,3 +1,4 @@
+require("reflect-metadata");
 import { Transaction } from "../entities/transaction";
 
 
