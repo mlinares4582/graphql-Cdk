@@ -3,6 +3,8 @@ import { Resolver, Query, Arg } from "type-graphql";
 import { Account } from "../entities/account";
 import axios from "axios";
 import { PlaidConstants } from "../../../constants/plaid-constans";
+const AWS = require("aws-sdk");
+const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
 @Resolver()
 export class AccountResolver {
@@ -13,10 +15,10 @@ export class AccountResolver {
 
     @Query(returns => [Account])
     async getAccounts(
-        @Arg("request_id", type => String) requestId: string,
+        @Arg("user_id", type => String) userId: string,
     ): Promise<[Account]> {
         // Get Access Token from Dynamo by User ID
-        const accessToken = null;
+        const accessToken = await this.getAccessTokenFromDB(userId);
 
         //Get Accounts with Plaid API and Access Token
         return await this.plaidApi.post('/accounts/balance/get', {
@@ -30,4 +32,23 @@ export class AccountResolver {
         });
     }
 
+    async getAccessTokenFromDB(
+        user_id: string,) {
+
+        const token = await dynamoDB.get({
+            TableName: "AthMovilTable",
+            Key: {
+                user_Id: user_id
+            }
+        }).promise();
+        
+            // console.log(token)
+            if (token.Item == undefined) {
+            return "";
+            }
+            // console.log(token.Item)
+            return token.Item.access_token
+    }
 }
+
+

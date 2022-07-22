@@ -55,8 +55,8 @@ export class PlaidResolver {
                     access_token: res.data["access_token"],
                  }
             }
-            var prom = await dynamoDB.put(params).promise()
-            console.log(prom)
+            var result = await dynamoDB.put(params).promise()
+            console.log(result)
             return {
                 access_token: res.data["access_token"],
                 request_id: res.data["request_id"],
@@ -117,16 +117,9 @@ async deleteAccessTokenFromPlaid(
                 }
             }
             var result = await dynamoDB.delete(params).promise()
-            if(result == undefined) {
-            console.log("resultitem undefined" + result)
-                return false;
-            }
-            console.log(result)
             return true;
         }
     
-
-
 
 
     @Mutation(returns => Boolean)
@@ -142,7 +135,7 @@ async deleteAccessTokenFromPlaid(
         if (plaidRes) {//delete from plaid succesful
             //delete access token from DB
             var dbRes = await this.deleteAccessTokenFromDB(user_id)
-            return dbRes;
+        return dbRes;
         }
         return plaidRes;//delete from plaid failed OR token not found in DB
     }

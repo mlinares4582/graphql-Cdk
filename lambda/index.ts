@@ -8,15 +8,6 @@ const { AccountResolver } =require( "./schema/account/resolver/account_resolver"
 const { PlaidResolver } =require( "./schema/plaid/resolver/plaid_resolver");
 const { TransactionResolver } =require( "./schema/transaction/resolver/transaction_resolver");
 
-
-// const { unmarshall } = require("@aws-sdk/util-dynamodb");
-// const { DynamoDBClient, ScanCommand } = require("@aws-sdk/client-dynamodb");
-
-// const client = new DynamoDBClient({ region: "us-east-1" });
-
-
-
-
 const globalSchema = buildSchema({
     resolvers: [PingResolver, NameResolver,PlaidResolver,AccountResolver,TransactionResolver]
 

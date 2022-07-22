@@ -16,7 +16,8 @@ export class RestApiGraphql extends Construct {
   
       this.lambda = this.createGraphqlLambda();
       this.createLambdaRestApi(this.lambda)
-      this.createGraphqlTable();
+      this.createGraphqlTokenTable();
+      this.createGraphqlAccountTable();
   
     }
   
@@ -34,9 +35,10 @@ export class RestApiGraphql extends Construct {
     handler: 'graphqlHandler',
     }); 
     return this.lambda;
+    
     }
 
-  createGraphqlTable():ITable{
+  createGraphqlTokenTable():ITable{
     this.table = new Table(this, 'AthMovilTable', {
       partitionKey: {
         name: 'user_Id',
@@ -44,6 +46,24 @@ export class RestApiGraphql extends Construct {
       },
       tableName: 'AthMovilTable',
     });
+    this.table.grantReadWriteData(this.lambda);
+    return this.table;
+  }
+
+  
+  createGraphqlAccountTable():ITable{
+    this.table = new Table(this, 'AthMovil_TransactionTable', {
+      partitionKey: {
+        name: 'user_id',
+        type: AttributeType.STRING
+      },
+      sortKey: {
+        name: 'timeCreated',
+        type: AttributeType.STRING
+      },
+      tableName: 'AthMovil_TransactionTable',
+    });
+    this.table.grantReadWriteData(this.lambda);
     return this.table;
   }
 

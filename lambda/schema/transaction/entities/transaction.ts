@@ -21,7 +21,7 @@ export class Transaction {
     @Field(type => String)
     message: string;
     @Field(type => String)
-    timestamp: string;
+    timeCreated: string;
 }
 
 @InputType()
