@@ -31,7 +31,7 @@ export class TransactionResolver {
                 user_id: newTransactionData.user_id,    
                 account_name: newTransactionData.account_name,
                 account_mask: newTransactionData.account_mask,
-                amount: newTransactionData.amount,
+                amount: "$"+newTransactionData.amount,
                 contact_name: newTransactionData.contact_name,
                 contact_number: newTransactionData.contact_number,
                 message: newTransactionData.message,
