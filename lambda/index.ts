@@ -7,9 +7,10 @@ const {NameResolver} =require("./schema/name");
 const { AccountResolver } =require( "./schema/account/resolver/account_resolver");
 const { PlaidResolver } =require( "./schema/plaid/resolver/plaid_resolver");
 const { TransactionResolver } =require( "./schema/transaction/resolver/transaction_resolver");
+const { CognitoResolver } =require( "./schema/cognito/resolver/cognito_resolver");
 
 const globalSchema = buildSchema({
-    resolvers: [PingResolver, NameResolver,PlaidResolver,AccountResolver,TransactionResolver]
+    resolvers: [PingResolver, NameResolver,PlaidResolver,AccountResolver,TransactionResolver, CognitoResolver]
 
 });
 
