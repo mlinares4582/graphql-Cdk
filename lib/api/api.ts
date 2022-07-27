@@ -5,11 +5,15 @@ import { Construct } from 'constructs';
 import * as  path from 'path';
 import { AttributeType, ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { AccountRecovery, UserPool, UserPoolClient, VerificationEmailStyle, } from 'aws-cdk-lib/aws-cognito';
+import { CfnOutput } from 'aws-cdk-lib';
 // import amazon-cognito-identity-js
 
 
 export class RestApiGraphql extends Construct {
-   
+
+    public readonly userPoolId: CfnOutput;
+    public readonly userPoolClientId: CfnOutput;
+    // public readonly identityPoolId: CfnOutput ;
     public lambda: Function;
     private api: LambdaRestApi;
     private table: ITable;
@@ -26,6 +30,14 @@ export class RestApiGraphql extends Construct {
       this.createCognitoUserPool();
       this.createCognitoUserPoolClient();
   
+
+      this.userPoolId = new CfnOutput(this, 'userPoolId', {
+        value: this.userPool.userPoolId,
+      });
+
+      this.userPoolClientId = new CfnOutput(this, 'userPoolClientId', {
+        value: this.userPoolClient.userPoolClientId,
+      });
     }
   
   createLambdaRestApi(fn:Function):LambdaRestApi{
@@ -98,4 +110,21 @@ export class RestApiGraphql extends Construct {
     });
     return this.userPoolClient;
   }
+
+  // createCognitoIdentityPool():void{
+  //   this.identityPool = new CognitoIdentityPool(this, 'AthMovilIdentityPool', {
+  //     identityPoolName: 'AthMovilIdentityPool',
+  //     allowUnauthenticatedIdentities: true,
+  //     cognitoIdentityProviders: [
+  //       {
+  //         clientId: this.userPoolClient.userPoolClientId,
+  //         providerName: 'cognito-idp.us-east-1.amazonaws.com/us-east-1_7Z6ecO3x4',
+  //       },
+  //     ],
+  // });
+
+  // }
+ 
+  
+ 
 }

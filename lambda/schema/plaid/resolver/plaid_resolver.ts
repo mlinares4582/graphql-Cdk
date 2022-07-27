@@ -1,5 +1,5 @@
 require("reflect-metadata");
-import { Resolver, Query, Arg, Mutation } from "type-graphql";
+import { Resolver, Query, Arg, Mutation, Authorized } from "type-graphql";
 import axios from "axios";
 import { AccessTokenResponseModel, LinkTokenResponseModel } from "../entities/plaid_model";
 import { PlaidConstants } from "../../../constants/plaid-constans";
@@ -14,6 +14,7 @@ export class PlaidResolver {
         baseURL: 'https://sandbox.plaid.com'
     })
 
+    @Authorized()
     @Query(returns => LinkTokenResponseModel)
     async getLinkToken() {
 
@@ -36,6 +37,7 @@ export class PlaidResolver {
 
     }
 
+    @Authorized()
     @Mutation(returns => AccessTokenResponseModel)
     async getAccessTokenFromPlaid(
         @Arg("user_id", type => String) user_id: string,
@@ -68,6 +70,7 @@ export class PlaidResolver {
         });
     }
 
+    @Authorized()
     @Query(returns => String)
     async getAccessTokenFromDB(
         @Arg("user_id", type => String) user_id: string,) {
@@ -121,7 +124,7 @@ async deleteAccessTokenFromPlaid(
         }
     
 
-
+    @Authorized()
     @Mutation(returns => Boolean)
     async deleteUserToken(
         @Arg("user_id", type => String) user_id: string,) {

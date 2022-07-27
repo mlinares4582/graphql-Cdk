@@ -1,5 +1,5 @@
 require("reflect-metadata");
-import { Resolver, Query, Arg, Mutation } from "type-graphql";
+import { Resolver, Query, Arg, Mutation, Authorized } from "type-graphql";
 import { NewTransactionInput, Transaction } from "../entities/transaction";
 import axios from "axios";
 const { v4 } = require('uuid');
@@ -14,6 +14,7 @@ export class TransactionResolver {
         baseURL: 'https://sandbox.plaid.com'
     })
 
+    @Authorized()
     @Mutation(() => Transaction)
     async postTransaction(
         @Arg("newTransactionData", type => NewTransactionInput) newTransactionData: NewTransactionInput,
@@ -71,6 +72,7 @@ export class TransactionResolver {
             return result.Item;
     }
 
+    @Authorized()
     @Query(() => [Transaction])
     async getTransactions(
         @Arg("userId", type => String) userId: string,

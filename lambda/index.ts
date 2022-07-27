@@ -1,3 +1,5 @@
+import { CognitoUser } from "amazon-cognito-identity-js";
+
 require("reflect-metadata");
 const { buildSchema } = require('type-graphql');
 const {ApolloServer, gql} = require('apollo-server-lambda');
@@ -10,7 +12,21 @@ const { TransactionResolver } =require( "./schema/transaction/resolver/transacti
 const { CognitoResolver } =require( "./schema/cognito/resolver/cognito_resolver");
 
 const globalSchema = buildSchema({
-    resolvers: [PingResolver, NameResolver,PlaidResolver,AccountResolver,TransactionResolver, CognitoResolver]
+    resolvers: [PingResolver, NameResolver,PlaidResolver,AccountResolver,TransactionResolver, CognitoResolver],
+    authChecker: (
+      { context, root, args, info }: any,
+      roles: any,
+    ) => {
+     
+//       userRoles = getIdToken()['payload']['cognito:groups'];
+//       if (roles contains userRoles){
+//         return true;
+//       }
+return false;
+      if (args != null) console.log("args: " + JSON.stringify(args));   
+      if (roles !=null) console.log("roles: " + JSON.stringify(roles));
+      return true; // or false if access is denied
+    },
 
 });
 
