@@ -11,53 +11,53 @@ import { CfnOutput } from 'aws-cdk-lib';
 
 export class RestApiGraphql extends Construct {
 
-    public readonly userPoolId: CfnOutput;
-    public readonly userPoolClientId: CfnOutput;
-    // public readonly identityPoolId: CfnOutput ;
-    public lambda: Function;
-    private api: LambdaRestApi;
-    private table: ITable;
-    private userPool: UserPool;
-    private userPoolClient: UserPoolClient;
-    
-    constructor(scope: Construct, id: string) {
-      super(scope, id);
-  
-      this.lambda = this.createGraphqlLambda();
-      this.createLambdaRestApi(this.lambda)
-      this.createGraphqlTokenTable();
-      this.createGraphqlAccountTable();
-      this.createCognitoUserPool();
-      this.createCognitoUserPoolClient();
-  
+  public readonly userPoolId: CfnOutput;
+  public readonly userPoolClientId: CfnOutput;
+  // public readonly identityPoolId: CfnOutput ;
+  public lambda: Function;
+  private api: LambdaRestApi;
+  private table: ITable;
+  private userPool: UserPool;
+  private userPoolClient: UserPoolClient;
 
-      this.userPoolId = new CfnOutput(this, 'userPoolId', {
-        value: this.userPool.userPoolId,
-      });
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
 
-      this.userPoolClientId = new CfnOutput(this, 'userPoolClientId', {
-        value: this.userPoolClient.userPoolClientId,
-      });
-    }
-  
-  createLambdaRestApi(fn:Function):LambdaRestApi{
+    this.lambda = this.createGraphqlLambda();
+    this.createLambdaRestApi(this.lambda)
+    this.createGraphqlTokenTable();
+    this.createGraphqlAccountTable();
+    this.createCognitoUserPool();
+    this.createCognitoUserPoolClient();
 
-    this.api =  new LambdaRestApi(this,'Lambda Api Graphql',{
-      handler:fn,         
+
+    this.userPoolId = new CfnOutput(this, 'userPoolId', {
+      value: this.userPool.userPoolId,
+    });
+
+    this.userPoolClientId = new CfnOutput(this, 'userPoolClientId', {
+      value: this.userPoolClient.userPoolClientId,
+    });
+  }
+
+  createGraphqlLambda(): Function {
+    this.lambda = new NodejsFunction(this, 'GraphqlLambda', {
+      entry: path.join(__dirname, '..', '..', 'lambda', 'index.ts'),
+      handler: 'graphqlHandler',
+    });
+    return this.lambda;
+
+  }
+
+  createLambdaRestApi(fn: Function): LambdaRestApi {
+
+    this.api = new LambdaRestApi(this, 'Lambda Api Graphql', {
+      handler: fn,
     });
     return this.api
   }
 
-  createGraphqlLambda():Function{
-    this.lambda = new NodejsFunction(this, 'GraphqlLambda', {
-    entry: path.join(__dirname,'..','..','lambda', 'index.ts'),
-    handler: 'graphqlHandler',
-    }); 
-    return this.lambda;
-    
-    }
-
-  createGraphqlTokenTable():ITable{
+  createGraphqlTokenTable(): ITable {
     this.table = new Table(this, 'AthMovilTable', {
       partitionKey: {
         name: 'user_Id',
@@ -69,8 +69,8 @@ export class RestApiGraphql extends Construct {
     return this.table;
   }
 
-  
-  createGraphqlAccountTable():ITable{
+
+  createGraphqlAccountTable(): ITable {
     this.table = new Table(this, 'AthMovil_TransactionTable', {
       partitionKey: {
         name: 'user_id',
@@ -86,7 +86,7 @@ export class RestApiGraphql extends Construct {
     return this.table;
   }
 
-  createCognitoUserPool():void{
+  createCognitoUserPool(): void {
     this.userPool = new UserPool(this, 'AthMovilUserPool', {
       selfSignUpEnabled: true,
       signInAliases: { username: true, email: true },
@@ -102,7 +102,7 @@ export class RestApiGraphql extends Construct {
     });
   }
 
-  createCognitoUserPoolClient():UserPoolClient{
+  createCognitoUserPoolClient(): UserPoolClient {
     this.userPoolClient = new UserPoolClient(this, 'AthMovilUserPoolClient', {
       userPool: this.userPool,
       userPoolClientName: 'AthMovilUserPoolClient',
@@ -124,7 +124,7 @@ export class RestApiGraphql extends Construct {
   // });
 
   // }
- 
-  
- 
+
+
+
 }
