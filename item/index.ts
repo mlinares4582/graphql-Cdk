@@ -1,37 +1,27 @@
-import { CognitoUser } from "amazon-cognito-identity-js";
+import "reflect-metadata";
 
-require("reflect-metadata");
-const { buildSchema } = require('type-graphql');
+import { ItemResolver } from "./schema/item";
+import { buildSchema } from "type-graphql";
+import { buildFederatedSchema } from "./helpers/buildFederatedSchema";
+const { build } = require('type-graphql');
 const {ApolloServer, gql} = require('apollo-server-lambda');
 require('apollo-server-lambda');
-const {PingResolver} =require("./schema/ping");
-const {NameResolver} =require("./schema/name");
-const { AccountResolver } =require( "./schema/account/resolver/account_resolver");
-const { PlaidResolver } =require( "./schema/plaid/resolver/plaid_resolver");
-const { TransactionResolver } =require( "./schema/transaction/resolver/transaction_resolver");
-const { CognitoResolver } =require( "./schema/cognito/resolver/cognito_resolver");
 
 const globalSchema = buildSchema({
-    resolvers: [PingResolver, NameResolver,PlaidResolver,AccountResolver,TransactionResolver, CognitoResolver],
-    authChecker: (
-      { context, root, args, info }: any,
-      roles: any,
-    ) => {
-     
-//       userRoles = getIdToken()['payload']['cognito:groups'];
-//       if (roles contains userRoles){
-//         return true;
-//       }
-return false;
-      if (args != null) console.log("args: " + JSON.stringify(args));   
-      if (roles !=null) console.log("roles: " + JSON.stringify(roles));
-      return true; // or false if access is denied
-    },
-
+    resolvers: [ItemResolver],
 });
 
 async function getServer() {
-    const schema = await globalSchema;
+    // const schema = await globalSchema;
+    const schema = await buildFederatedSchema(
+      {
+        resolvers: [ItemResolver],
+        // orphanedTypes: [Item],
+      },
+      // {
+      //   Item: { __resolveReference: resolveUserReference },
+      // },
+    );
     return new ApolloServer({
         schema
     });
